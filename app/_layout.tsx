@@ -1,37 +1,55 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
-import { useEffect } from 'react';
-import 'react-native-reanimated';
+import { useStorageState, setStorageItemAsync } from "@/hooks/useStorageState";
+import { Stack } from "expo-router";
+import { useEffect, useState } from "react";
+import { SafeAreaView } from "react-native";
 
-import { useColorScheme } from '@/hooks/useColorScheme';
+//constantes
+const HAS_LAUNCHED = 'HAS_LAUNCHED';
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
-SplashScreen.preventAutoHideAsync();
 
+
+//Aqui inicia o react native com expo
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  });
+  const [hasLaunched, setHasLaunched] = useState(false);
 
-  useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
-    }
-  }, [loaded]);
-
-  if (!loaded) {
-    return null;
+  const getData = () => {
+    //Verificar se o utilizador ja iniciou a app
+    
+  
+    //verificar se ja deu launch a aplicacao ou nao
+    useEffect(() => {
+      const getData = async () => {
+        const hasLaunched = await useStorageState(HAS_LAUNCHED);//receber o valor
+  
+        console.log("hasLaunched" + hasLaunched);//verificar o valor, remover depois
+  
+        if (hasLaunched) {
+          setHasLaunched(true);//dar update ao state da var hasLaunched para true
+        } else {
+          await setStorageItemAsync(HAS_LAUNCHED, "true");//dar update ao valor que possui na storage
+        }
+      };
+  
+      getData().catch((error: Error) => { console.log(error) });//se der erro, apresentar o erro no console log
+    }, [])//, [] para a funcao correr apenas uma vez no inicio da aplicacao
   }
 
+  
+
+
+  //verificar se existe dados sobre o utilizador na storage para poder fazer login automatico
+
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+    <SafeAreaView >
       <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
+      //Check if user already has launched the app
+        {hasLaunched ?
+          //Se ja deu launch a aplicacao, ir para a pagina principal
+          <Stack.Screen name="index" />
+          : //Se nunca correu a aplicacao, apresentar o login e o a apresentacao inicial
+          <Stack.Screen name="index" />
+        }
       </Stack>
-    </ThemeProvider>
+    </SafeAreaView >
   );
 }
