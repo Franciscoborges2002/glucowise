@@ -22,12 +22,12 @@ const connectDB = async () => {
 
 //Aqui inicia o react native com expo
 export default function RootLayout() {
-  connectionDataSource
+  /* connectionDataSource
     .initialize()
     .then(async () => {//If its successfull
       console.log("Data Source has been initialized!");
     })
-    .catch((error) => console.log(error));//If throws an error
+    .catch((error) => console.log(error));//If throws an error */
   /* useEffect(async () => {
     try {
       const connection = await mongoose.connect(BdConnection.URL)
