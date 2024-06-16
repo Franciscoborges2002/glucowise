@@ -28,6 +28,7 @@ export function useSession() {
 export function SessionProvider(props: React.PropsWithChildren) {
     const [[isLoading, session], setSession] = useStorageState('session');
     const [user, setUser] = useStorageState('User');
+    const [notification, setNotification] = useStorageState('Notifications');//para criar a norificacao
 
     return (
         <AuthContext.Provider
@@ -38,6 +39,8 @@ export function SessionProvider(props: React.PropsWithChildren) {
                         return false;
                     }
 
+
+
                     //criar objeto inicial
                     let userInfo = {
                         username: username,
@@ -45,8 +48,15 @@ export function SessionProvider(props: React.PropsWithChildren) {
                         realName: "",
                         email: "",
                         token: "",
-                        diabetes: []
+                        diabetes: [],
+                        medication: []
                     }
+
+                    let notification = {
+                        notifications: []
+                    }
+
+                    console.log(userInfo)
 
                     //sistema de login basico
                     if (userInfo.username === "a" && userInfo.password === "a") {
@@ -55,8 +65,10 @@ export function SessionProvider(props: React.PropsWithChildren) {
                         userInfo.token = "11";
 
                         let userSave: string = JSON.stringify(userInfo);
+                        let notificationSave: string = JSON.stringify(notification);
 
                         setUser(userSave);
+                        setNotification(notificationSave);
                         setSession(userInfo.token);
                         return true;
                     }

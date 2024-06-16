@@ -8,10 +8,7 @@ import { HelloWave } from '@/components/HelloWave';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 
-import { useSession } from '@/ctx';
-
 export default function HomeScreen() {
-  const { signOut } = useSession();
   const [[isLoading, user], setUser] = useStorageState('User');
 
   if (isLoading) {
@@ -36,7 +33,9 @@ export default function HomeScreen() {
           <ThemedText type="title" className="text-black">Hi, {userInfo.realName.split(" ")[0]}!</ThemedText>
         </View>
         <View>
-          <Image source={{ uri: 'https://iili.io/d9Xhjrg.png' }} className="w-10 h-10" />
+          {/* <Link href="/settings"> */}
+            <Image source={{ uri: 'https://iili.io/d9Xhjrg.png' }} className="w-10 h-10" />
+   {/*        </Link> */}
         </View>
       </ThemedView>
 

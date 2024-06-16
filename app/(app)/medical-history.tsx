@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { StyleSheet, ScrollView, View, Text, SafeAreaView, StatusBar } from 'react-native';
 import { Link } from 'expo-router';
-import DiabetesRegister from "../../components/DiabetesRegister"
+import DiabetesRegister from "../../components/DiabetesRegister";
 import { useStorageState } from "@/hooks/useStorageState";
 
 import { useEffect } from 'react';
@@ -10,6 +10,14 @@ interface Diabetes {
   dateTime: Date;
   level: number;
 }
+
+interface Medication {
+  name: String;
+  perscription: String;
+  quantity: String;
+  description: String;
+}
+
 interface User {
   username: string;
   email: string;
@@ -18,6 +26,7 @@ interface User {
   tipoDiabetes: string;
   token: string;
   diabetes: Array<Diabetes>;
+  medication: Array<Medication>;
 }
 
 export default function TabTwoScreen() {
@@ -28,34 +37,9 @@ export default function TabTwoScreen() {
     return <Text>Loading...</Text>;
   }
 
-  const diabetes = {
-    diabetes: [
-      {
-        id: 0,
-        dateTime: "1997-07-16T19:20+01:00",
-        level: 5
-      },
-      {
-        id: 1,
-        dateTime: "1997-07-16T19:20+01:00",
-        level: 2
-      },
-      {
-        id: 2,
-        dateTime: "1997-07-16T19:20+01:00",
-        level: 5
-      },
-      {
-        id: 3,
-        dateTime: "1997-07-16T19:20+01:00",
-        level: 2
-      }
-    ]
-  }
-
   let userInfo: User = JSON.parse(user);
 
-  console.log(userInfo)
+console.log(userInfo)
 
   return (
     <SafeAreaView style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -66,8 +50,8 @@ export default function TabTwoScreen() {
               <Text className="mb-2 font-bold text-xl w-full flex justify-center">
                 {userInfo.tipoDiabetes}
               </Text>
-              <ScrollView >
-                {
+              <ScrollView>
+                {/* {
                   userInfo.diabetes.map((register) => (
                     <DiabetesRegister
                       key={register.dateTime}
@@ -75,7 +59,7 @@ export default function TabTwoScreen() {
                       level={register.level}
                     />
                   ))
-                }
+                } */}
 
               </ScrollView>
               <View className="items-end mt-20">
@@ -90,8 +74,6 @@ export default function TabTwoScreen() {
             </View>
           ) : (
             <View>
-
-
               <Text className="text-lg text-slate-400 text-center my-8">
                 Não existe nenhum registo de diabetes.
               </Text>
@@ -102,7 +84,7 @@ export default function TabTwoScreen() {
           )
         }
       </View>
-    </SafeAreaView >
+    </SafeAreaView>
   );
 }
 

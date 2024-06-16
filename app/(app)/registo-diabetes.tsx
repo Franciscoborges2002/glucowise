@@ -8,6 +8,14 @@ interface Diabetes {
   dateTime: Date;
   level: number;
 }
+
+interface Medication {
+  name: String;
+  perscription: String;
+  quantity: String;
+  description: String;
+}
+
 interface User {
   username: string;
   email: string;
@@ -16,7 +24,19 @@ interface User {
   tipoDiabetes: string;
   token: string;
   diabetes: Array<Diabetes>;
+  medication: Array<Medication>;
 }
+
+interface Notification {
+  title: string;
+  description: string;
+  dateTime: Date;
+}
+
+interface Notifications {
+  notifications: Array<Notification>
+}
+
 
 interface DiabetesLevelFormProps {
   onSubmit: (level: number) => void; // Callback function to handle form submission
@@ -28,15 +48,15 @@ export default function diabetesMedication() {
   const [[isLoading, user], setUser] = useStorageState('User');
   const [value, setValue] = useState(null);
   const [isFocus, setIsFocus] = useState(false);
+  const [[isLoadingNoti, notification], setNotification] = useStorageState('Notifications');//para criar a norificacao
 
   //acabar de carregar os dados
-  if (isLoading) {
+  if (isLoading && isLoadingNoti) {
     return <Text>Loading...</Text>;
   }
 
   let userInfo: User = JSON.parse(user);
-
-  console.log(userInfo)
+  let notificationsGotten: Notifications = JSON.parse(notification);
 
   //dados para o dropdown
   const data = [
@@ -49,17 +69,22 @@ export default function diabetesMedication() {
   const validateForm = () => {
     let errors = {};
 
-    if (level < 0 || level > 10) {//ver melhor depois, nao sei os valores
+    if (level < 1 || level > 10) {//ver melhor depois, nao sei os valores
       errors.levels = "Valor nao existe, no contexto da glicose!";
 
       Alert.alert("OOPS!", "Valor da glicose não está correto!");
+    }
+
+    if (!('tipoDiabetes' in userInfo) && value === null) {//ver melhor depois, nao sei os valores
+      errors.levels = "Não existe valor para o tipo de diabetes!";
+
+      Alert.alert("OOPS!", "Não existe valor para o tipo de diabetes!");
     }
 
     setErrors(errors);
 
     return Object.keys(errors).length === 0;
   }
-
 
   const handleSubmit = () => {
     if (!validateForm()) {//ver melhor depois, nao sei os valores
@@ -92,8 +117,24 @@ export default function diabetesMedication() {
         ]
       }
 
-      //console.log(newUserInfo)
     }
+
+    //testar notificacoes
+    if(level > 6){
+      let newNotification = {
+        notifications:[
+          ...notificationsGotten.notifications,
+          {
+            title: "Valor alarmante!",
+            description: `O valor ${level} e uma valor preocupante para a glicose!`,
+            dateTime: new Date(),
+          }
+        ]
+      }
+
+      setNotification(JSON.stringify(newNotification));
+    }
+
     newUserInfo = JSON.stringify(newUserInfo);
 
     setUser(newUserInfo);

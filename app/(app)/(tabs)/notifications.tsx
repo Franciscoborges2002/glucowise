@@ -1,14 +1,65 @@
-import { View, StyleSheet, Platform } from 'react-native';
+import { View, StyleSheet, Text, ScrollView } from 'react-native';
+import { useStorageState } from "@/hooks/useStorageState";
+import NotificationItem from "../../../components/NotificationItem"
 
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
+interface Notification {
+  title: string;
+  description: string;
+  dateTime: Date;
+}
+
+interface Notifications {
+  notifications: Array<Notification>
+}
+
 
 export default function HomeScreen() {
-  return (
-    <View>
+  const [[isLoading, notification], setNotification] = useStorageState('Notifications');
 
+  //acabar de carregar os dados
+  if (isLoading) {
+    return <Text>Loading...</Text>;
+  }
+
+  let notificationsGotten: Notifications = JSON.parse(notification);
+
+  console.log("notifications", notificationsGotten)
+
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      {
+        notificationsGotten === null ? (
+          <View>
+            <Text className="text-lg text-slate-400 text-center my-8">
+              Não existem Notificações!
+            </Text>
+          </View>
+        ) : (
+          <View className="flex flex-col h-[95%] w-full p-5">
+            <Text>
+              <Text className="mb-2 font-bold text-lg">
+                {notificationsGotten.notifications.length}
+              </Text>
+              {"\xA0"}{/* dar um eswpaco */}
+              Notificações
+            </Text>
+
+            <ScrollView >
+              {
+                notificationsGotten.notifications.map((item) => (
+                  <NotificationItem
+                    key={item.dateTime}
+                    title={item.title}
+                    description={item.description}
+                    dateTime={item.dateTime}
+                  />
+                ))
+              }
+
+            </ScrollView>
+          </View>
+        )
+      }
     </View>
   );
 }
@@ -18,6 +69,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
+    width: "100%"
   },
   stepContainer: {
     gap: 8,

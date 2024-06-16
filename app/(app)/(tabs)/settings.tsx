@@ -1,4 +1,3 @@
-import Ionicons from '@expo/vector-icons/Ionicons';
 import { StyleSheet, Image, Platform, View, Text, SafeAreaView, StatusBar } from 'react-native';
 
 import { useStorageState } from '@/hooks/useStorageState';

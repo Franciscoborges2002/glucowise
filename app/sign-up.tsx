@@ -8,8 +8,8 @@ export default function SignIn() {
 
     const { signIn } = useSession();
 
-    const { username, setUsername } = useState("");
-    const { password, setPassword } = useState("");
+    const [ username, setUsername ] = useState("");
+    const [ password, setPassword ] = useState("");
 
     return (
         <View className="flex flex-col items-center pt-10 gap-5">
