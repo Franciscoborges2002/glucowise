@@ -45,7 +45,7 @@ export default function TabTwoScreen() {
           diabetes.diabetes.length > 0 ? (
             <View className="flex flex-col w-full">
               <ScrollView className="w-full">
-                {userInfo.diabetes.map((register) => (
+                {diabetes.diabetes.map((register) => (
                   <DiabetesRegister
                     key={register.id}
                     dateTime={register.dateTime}

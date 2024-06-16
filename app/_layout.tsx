@@ -8,7 +8,7 @@ import { useColorScheme } from '@/hooks/useColorScheme';
 import { SafeAreaView } from "react-native";
 import SafeView from "@/constants/SafeViews";
 import mongoose from 'mongoose';
-import BdConnection from "@/constants/BdConnection"
+import {connectionDataSource} from "@/constants/BdConnection"
 
 //constantes
 const HAS_LAUNCHED = 'HAS_LAUNCHED';
@@ -17,11 +17,17 @@ const HAS_LAUNCHED = 'HAS_LAUNCHED';
 //SplashScreen.preventAutoHideAsync();
 
 const connectDB = async () => {
-  
+
 };
 
 //Aqui inicia o react native com expo
 export default function RootLayout() {
+  connectionDataSource
+    .initialize()
+    .then(async () => {//If its successfull
+      console.log("Data Source has been initialized!");
+    })
+    .catch((error) => console.log(error));//If throws an error
   /* useEffect(async () => {
     try {
       const connection = await mongoose.connect(BdConnection.URL)
@@ -32,13 +38,13 @@ export default function RootLayout() {
     }
   }, []); */
   //Var para verificar se o utillizador ja inicializou a aplicacao ou nao
- /*  const [hasLaunched, setHasLaunched] = useState(false);
-  const [signedIn, setSignedIn] = useState(false);
-
-  //Set log in to true or false
-  useEffect(() => {
-    setSignedIn(true);
-  }); */
+  /*  const [hasLaunched, setHasLaunched] = useState(false);
+   const [signedIn, setSignedIn] = useState(false);
+ 
+   //Set log in to true or false
+   useEffect(() => {
+     setSignedIn(true);
+   }); */
 
   //Get color scheme from 
   // const colorScheme = useColorScheme();
