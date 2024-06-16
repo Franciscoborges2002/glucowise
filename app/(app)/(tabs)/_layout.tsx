@@ -24,7 +24,7 @@ export default function TabLayout() {
         }}
       />
       {/* {color} */}
-      <Tabs.Screen
+      {/* <Tabs.Screen
         name="statistics"
         options={{
           title: 'Statistics',
@@ -32,7 +32,7 @@ export default function TabLayout() {
             <TabBarIoIcon name={focused ? 'stats-chart' : 'stats-chart-outline'} color="#000" />
           ),
         }}
-      />
+      /> */}
       <Tabs.Screen
         name="notifications"
         options={{
