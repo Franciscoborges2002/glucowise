@@ -11,24 +11,25 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+        tabBarActiveTintColor: Colors[colorScheme ?? 'dark'].tint,
         headerShown: false,
       }}>
       <Tabs.Screen
-        name="home"
+        name="index"
         options={{
-          title: 'Home',
+           title: 'Home',
           tabBarIcon: ({ color, focused }) => (
-            <TabBarIoIcon name={focused ? 'home' : 'home-outline'} color={color} />
+            <TabBarIoIcon name={focused ? 'home' : 'home-outline'} color="#000" /> 
           ),
         }}
       />
+      {/* {color} */}
       <Tabs.Screen
         name="statistics"
         options={{
           title: 'Statistics',
           tabBarIcon: ({ color, focused }) => (
-            <TabBarIoIcon name={focused ? 'stats-chart' : 'stats-chart-outline'} color={color} />
+            <TabBarIoIcon name={focused ? 'stats-chart' : 'stats-chart-outline'} color="#000" />
           ),
         }}
       />
@@ -37,16 +38,16 @@ export default function TabLayout() {
         options={{
           title: 'Notifications',
           tabBarIcon: ({ color, focused }) => (
-            <TabBarIoIcon name={focused ? 'notifications' : 'notifications-outline'} color={color} />
+            <TabBarIoIcon name={focused ? 'notifications' : 'notifications-outline'} color="#000" />
           ),
         }}
       />
       <Tabs.Screen
         name="settings"
         options={{
-          title: 'Explore',
+          title: 'Settings',
           tabBarIcon: ({ color, focused }) => (
-            <TabBarIoIcon name={focused ? 'settings-sharp' : 'settings-outline'} color={color} />
+            <TabBarIoIcon name={focused ? 'settings-sharp' : 'settings-outline'} color="#000" />
           ),
         }}
       />
