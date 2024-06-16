@@ -3,25 +3,32 @@ import { Entity, Column, PrimaryGeneratedColumn } from "typeorm";
 interface Diabetes{
     dateTime: Date;
     level: number;
+
+    toJSON(): object;
+    fromJSON(json: object): Diabetes;
 }
 
-@Entity()
+@Entity({ database: "glucowise", name: "users" })
 export class User {
     @PrimaryGeneratedColumn()
     id!: number;
 
-    @Column({ unique: true })
+    @Column({ unique: true, type: "varchar", length: 255 })
     username!: string;
 
-    @Column()
+    @Column({ type: "varchar", length: 255 })
     password!: string;
 
-    @Column({ unique: true })
+    @Column({ unique: true, type: "varchar", length: 255 })
     email!: string;
 
-    @Column()
+    @Column({ type: "varchar", length: 255 })
     tipoDiabetes!: string;
 
-    @Column()
-    diabetes!: Diabetes;
+    @Column("simple-array")
+    diabetes!: string[];
+
+    User(){
+
+    }
 }

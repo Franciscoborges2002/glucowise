@@ -44,7 +44,8 @@ export function SessionProvider(props: React.PropsWithChildren) {
                         password: password,
                         realName: "",
                         email: "",
-                        token: ""
+                        token: "",
+                        diabetes: []
                     }
 
                     //sistema de login basico
@@ -55,12 +56,8 @@ export function SessionProvider(props: React.PropsWithChildren) {
 
                         let userSave: string = JSON.stringify(userInfo);
 
-                        console.log("teste", typeof(userSave))
-
                         setUser(userSave);
                         setSession(userInfo.token);
-                        console.log(user)
-                        console.log("dededededed")
                         return true;
                     }
                     return false;

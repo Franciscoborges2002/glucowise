@@ -1,15 +1,32 @@
 import { useState } from 'react';
-import { StyleSheet, Image, ScrollView, View, Text, SafeAreaView, StatusBar } from 'react-native';
+import { StyleSheet, ScrollView, View, Text, SafeAreaView, StatusBar } from 'react-native';
 import { Link } from 'expo-router';
 import DiabetesRegister from "../../components/DiabetesRegister"
 import { useStorageState } from "@/hooks/useStorageState";
 
-
-import { useSession } from '../../ctx';
 import { useEffect } from 'react';
+
+interface Diabetes {
+  dateTime: Date;
+  level: number;
+}
+interface User {
+  username: string;
+  email: string;
+  password: string;
+  realName: string;
+  tipoDiabetes: string;
+  token: string;
+  diabetes: Array<Diabetes>;
+}
 
 export default function TabTwoScreen() {
   const [[isLoading, user], setUser] = useStorageState('User');
+
+  //acabar de carregar os dados
+  if (isLoading) {
+    return <Text>Loading...</Text>;
+  }
 
   const diabetes = {
     diabetes: [
@@ -36,22 +53,29 @@ export default function TabTwoScreen() {
     ]
   }
 
-  let userInfo: object = JSON.parse(user);
+  let userInfo: User = JSON.parse(user);
+
+  console.log(userInfo)
 
   return (
     <SafeAreaView style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <View className="w-full p-5">
         {
-          diabetes.diabetes.length > 0 ? (
-            <View className="flex flex-col w-full">
-              <ScrollView className="w-full">
-                {diabetes.diabetes.map((register) => (
-                  <DiabetesRegister
-                    key={register.id}
-                    dateTime={register.dateTime}
-                    level={register.level}
-                  />
-                ))}
+          userInfo.diabetes.length > 0 ? (
+            <View className="flex flex-col h-[95%]">
+              <Text className="mb-2 font-bold text-xl w-full flex justify-center">
+                {userInfo.tipoDiabetes}
+              </Text>
+              <ScrollView >
+                {
+                  userInfo.diabetes.map((register) => (
+                    <DiabetesRegister
+                      key={register.dateTime}
+                      dateTime={register.dateTime}
+                      level={register.level}
+                    />
+                  ))
+                }
 
               </ScrollView>
               <View className="items-end mt-20">
@@ -62,10 +86,7 @@ export default function TabTwoScreen() {
                     </Text>
                   </View>
                 </Link>
-
               </View>
-
-
             </View>
           ) : (
             <View>

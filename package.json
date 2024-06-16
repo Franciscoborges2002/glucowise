@@ -10,7 +10,12 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "test": "jest --watchAll",
-    "lint": "expo lint"
+    "lint": "expo lint",
+    "typeorm:create": "typeorm migration:create ./Migrations",
+    "typeorm:generate": "npx typeorm migration:generate -d constants/BdConnection.ts",
+    "typeorm:migrate": "npx typeorm migration:run -d constants/BdConnection.ts",
+    "typeorm:revert": "npx typeorm migration:revert -d constants/BdConnection.ts",
+    "typeorm:drop": "npx typeorm schema:drop -d constants/BdConnection.ts"
   },
   "jest": {
     "preset": "jest-expo"
@@ -50,7 +55,8 @@
     "react-native-screens": "3.31.1",
     "react-native-web": "~0.19.10",
     "reflect-metadata": "^0.2.2",
-    "typeorm": "^0.3.20"
+    "typeorm": "^0.3.20",
+    "expo-notifications": "~0.28.9"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

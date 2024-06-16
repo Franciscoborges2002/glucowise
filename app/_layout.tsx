@@ -7,8 +7,9 @@ import { useEffect, useState } from "react";
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { SafeAreaView } from "react-native";
 import SafeView from "@/constants/SafeViews";
-import mongoose from 'mongoose';
-import {connectionDataSource} from "@/constants/BdConnection"
+import 'reflect-metadata';
+import { User } from "../Entities/user.entity";
+import { connectionDataSource } from "@/constants/BdConnection"
 
 //constantes
 const HAS_LAUNCHED = 'HAS_LAUNCHED';
@@ -16,18 +17,29 @@ const HAS_LAUNCHED = 'HAS_LAUNCHED';
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 //SplashScreen.preventAutoHideAsync();
 
-const connectDB = async () => {
 
-};
 
 //Aqui inicia o react native com expo
 export default function RootLayout() {
-  /* connectionDataSource
-    .initialize()
-    .then(async () => {//If its successfull
-      console.log("Data Source has been initialized!");
-    })
-    .catch((error) => console.log(error));//If throws an error */
+  /* const connectDB = async () => {
+    return await connectionDataSource
+      .initialize()
+      .then(async () => {//If its successfull
+        console.log("Data Source has been initialized!");
+      })
+      .catch((error) => console.log(error));//If throws an error
+  };
+
+  connectDB();
+
+  console.log("passou") */
+/* 
+  try {
+    const userRepo = connectionDataSource.getRepository(User);//Get the repository of the Items
+
+  } catch (err) {
+    console.log(err)
+  } */
   /* useEffect(async () => {
     try {
       const connection = await mongoose.connect(BdConnection.URL)

@@ -2,6 +2,21 @@ import React, { useState } from 'react';
 import { View, TextInput, Button, StyleSheet, Text, Alert } from 'react-native';
 import { useStorageState } from "@/hooks/useStorageState";
 import { Dropdown } from 'react-native-element-dropdown';
+import { router } from 'expo-router';
+
+interface Diabetes {
+  dateTime: Date;
+  level: number;
+}
+interface User {
+  username: string;
+  email: string;
+  password: string;
+  realName: string;
+  tipoDiabetes: string;
+  token: string;
+  diabetes: Array<Diabetes>;
+}
 
 interface DiabetesLevelFormProps {
   onSubmit: (level: number) => void; // Callback function to handle form submission
@@ -14,14 +29,14 @@ export default function diabetesMedication() {
   const [value, setValue] = useState(null);
   const [isFocus, setIsFocus] = useState(false);
 
-  let userInfo: object = JSON.parse(user);
-
-  console.log(userInfo)
-
   //acabar de carregar os dados
   if (isLoading) {
     return <Text>Loading...</Text>;
   }
+
+  let userInfo: User = JSON.parse(user);
+
+  console.log(userInfo)
 
   //dados para o dropdown
   const data = [
@@ -30,18 +45,6 @@ export default function diabetesMedication() {
     { label: 'Diabetes tipo 2', value: 'Diabetes tipo 2' },
     { label: 'Diabetes Gestacional', value: 'Diabetes Gestacional' },
   ];
-
-
-  const renderLabel = () => {
-    if (value || isFocus) {
-      return (
-        <Text style={[styles.label, isFocus && { color: 'blue' }]}>
-          Dropdown label
-        </Text>
-      );
-    }
-    return null;
-  };
 
   const validateForm = () => {
     let errors = {};
@@ -58,16 +61,18 @@ export default function diabetesMedication() {
   }
 
 
-  const handleSubmit = (level: number, tipoDiabetes: string) => {
+  const handleSubmit = () => {
     if (!validateForm()) {//ver melhor depois, nao sei os valores
       return null;//Retornar e aparecer o alerta
     }
 
+    let newUserInfo;
+
     //Verificar se tem a propriedade diabetes
-    if (!userInfo.hasOwnProperty("tipoDiabetes") && !userInfo.hasOwnProperty("diabetes")) {
-      let newUserInfo = {
+    if (!userInfo.hasOwnProperty("tipoDiabetes")) {
+      newUserInfo = {
         ...userInfo,
-        tipoDiabetes: tipoDiabetes,
+        tipoDiabetes: value,//meter o valor guardado nos diabetes
         diabetes: [
           {
             dateTime: new Date(),
@@ -76,67 +81,79 @@ export default function diabetesMedication() {
         ]
       }
     } else {//se ja tiver as properidades
+      newUserInfo = {
+        ...userInfo,
+        diabetes: [
+          ...userInfo.diabetes,
+          {
+            dateTime: new Date(),
+            level: level
+          }
+        ]
+      }
 
+      //console.log(newUserInfo)
     }
+    newUserInfo = JSON.stringify(newUserInfo);
 
+    setUser(newUserInfo);
 
-    // Here you would typically save the level to a database or perform other actions
-
-
+    router.back();//Ir uma vez para tras
+    router.back();//Ir para o menu principal
   };
 
   return (
     <View className="flex flex-col gap-[5%] px-5 pt-5">
       {/* Parte inicial */}
-      <View className="flex items-center">
+      <View className="flex items-center  mb-5">
         <Text className="font-bold text-2xl items-center">
           Registar Nivel de Glicose!
         </Text>
-
       </View>
-      {
-        "tipoDiabetes" in userInfo ? (
-          <View>
-            <View style={styles.container}>
-              {renderLabel()}
-              <Dropdown
-                style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
-                placeholderStyle={styles.placeholderStyle}
-                selectedTextStyle={styles.selectedTextStyle}
-                inputSearchStyle={styles.inputSearchStyle}
-                data={data}
-                search
-                maxHeight={300}
-                labelField="label"
-                valueField="value"
-                placeholder={!isFocus ? 'Select item' : '...'}
-                searchPlaceholder="Search..."
-                value={value}
-                onFocus={() => setIsFocus(true)}
-                onBlur={() => setIsFocus(false)}
-                onChange={item => {
-                  setValue(item.value);
-                  setIsFocus(false);
-                }}
-              />
+
+      <View className="flex flex-col ">
+        {
+          !("tipoDiabetes" in userInfo) ? (
+            <View className="mb-10">
+              <View style={styles.container}>
+                <Dropdown
+                  style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
+                  placeholderStyle={styles.placeholderStyle}
+                  selectedTextStyle={styles.selectedTextStyle}
+                  inputSearchStyle={styles.inputSearchStyle}
+                  data={data}
+                  search
+                  maxHeight={300}
+                  labelField="label"
+                  valueField="value"
+                  placeholder={!isFocus ? 'Select item' : '...'}
+                  searchPlaceholder="Search..."
+                  value={value}
+                  onFocus={() => setIsFocus(true)}
+                  onBlur={() => setIsFocus(false)}
+                  onChange={item => {
+                    setValue(item.value);
+                    setIsFocus(false);
+                  }}
+                />
+              </View>
             </View>
-          </View>
-        ) : (
-          <>
-          </>
-        )
-      }
-      {/* Forms */}
-      <View className="flex flex-col">
-        <TextInput
-          className="appearance-none rounded-md py-4 px-6 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 mb-5"
-          keyboardType="numeric"
-          onChangeText={(text) => setLevel(Number(text))}
-          placeholder="Insere o nivel de glicose!"
-        />
-        <Button onPress={handleSubmit} title="Enviar" color="#432C81" />
+          ) : (
+            <>
+            </>
+          )
+        }
+        {/* Forms */}
+        <View className="flex flex-col">
+          <TextInput
+            className="appearance-none rounded-md py-4 px-6 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 mb-5"
+            keyboardType="numeric"
+            onChangeText={(text) => setLevel(Number(text))}
+            placeholder="Insere o nivel de glicose!"
+          />
+          <Button onPress={handleSubmit} title="Enviar" color="#432C81" />
+        </View>
       </View>
-
     </View>
   );
 }
